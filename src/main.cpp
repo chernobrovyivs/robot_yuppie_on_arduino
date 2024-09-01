@@ -52,4 +52,15 @@ void loop() {
   }
 */
   forward();
+  delay(1000);
+  forward_left();
+  delay(500);
+  forward();
+  delay(500);
+  forward_right();
+  delay(500);
+  _stop();
+  delay(500);
+  backward();
+  delay(800);
 }
