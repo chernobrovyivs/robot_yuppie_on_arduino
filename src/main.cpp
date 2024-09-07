@@ -12,6 +12,16 @@
 #include <Sonar.h>
 // Подключаем библиотеку управления двигателями (4 двигателя)
 #include <Motor.h>
+// Подключаем библиотеку для создания дополнительных последовательных (Serial) портов.
+#include <SoftwareSerial.h>
+#include <move_case.h>
+
+//Создаем последовательный порт на пинах 13-чтение и 2-передача.
+SoftwareSerial BTSerial(10, 11); // RX, TX
+// Переменная для приема данных по Bluetooth.
+char bt_input;
+// Хранит время последнего нажатия кнопки.
+unsigned long _time;
 
 Servo neck;
 
@@ -26,6 +36,16 @@ void setup() {
   setup_motor_system(4, 5, 6, 7);
 
   _stop();
+
+  // Устанавливаем скорость передачи данных для НС-05 (Bluetooth-модуль).
+  BTSerial.begin(9600);
+  // Переключаем A0 в двоичный режим работы, на передачу.
+  // если вы его еще не отключили
+  pinMode(14, OUTPUT);
+  // Устанавливаем скорость передачи данных по кабелю.
+  // Порт компьютера
+  //Serial.begin(9600);
+  _time = micros();
 }
 
 int sonar_func() {
@@ -38,33 +58,25 @@ int sonar_func() {
 }
 
 void loop() {
-  int i;
-/*
-  for(i=10; i<=180; i=i+10)
+  if (BTSerial.available())
   {
-    neck.write(i);
-    sonar_func();
-    delay(2000);
+    // Читаем команду и заносим ее в переменную. char преобразует
+    // код символа команды в символ.
+    bt_input = (char)BTSerial.read();
+    // Отправляем команду в порт, чтобы можно было
+    // их проверить в "Мониторе порта".
+    //Serial.println(bt_input);
+    //Вызов функции выбора действия по команде
+    move_case(bt_input);
+    _time = micros();
   }
-
-  for(i=180; i>=0; i=i-10)
+  if ((micros() - _time) > _move_time)
   {
-    neck.write(i);
-    sonar_func();
-    delay(2000);
+    _stop();
   }
-*/
-
-  forward();
-  delay(5000);
-  forward_left();
-  delay(1000);
-  forward();
-  delay(1000);
-  forward_right();
-  delay(1000);
-  _stop();
-  delay(1000);
-  backward();
-  delay(800);
+  if ((micros() - _time) >= 500)
+  {
+    _time = micros();
+    move_case(bt_input);
+  }
 }
