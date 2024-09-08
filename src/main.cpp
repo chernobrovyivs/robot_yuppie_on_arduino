@@ -1,27 +1,17 @@
 /*
   Project to build a robot named Yuppie on base Arduino UNO R3.
-  version: 0.0.4
+  version: 0.1.0
   date: 28.08.2024
-  modified 01.09.2024
+  modified 08.09.2024
   Developer: Valeriy Chernobrovyi (chernobrovyivs)
 */
 
+// Подключаем библиотеку управления через Bluetooth
+#include <BluetoothRC.h>
 // Подключаем библиотеку управления сервомоторами
 #include <Servo.h>
 // Подключаем библиотеку управления ультразвуковым датчиком
 #include <Sonar.h>
-// Подключаем библиотеку управления двигателями (4 двигателя)
-#include <Motor.h>
-// Подключаем библиотеку для создания дополнительных последовательных (Serial) портов.
-#include <SoftwareSerial.h>
-#include <move_case.h>
-
-//Создаем последовательный порт на пинах 13-чтение и 2-передача.
-SoftwareSerial BTSerial(10, 11); // RX, TX
-// Переменная для приема данных по Bluetooth.
-char bt_input;
-// Хранит время последнего нажатия кнопки.
-unsigned long _time;
 
 Servo neck;
 
@@ -58,25 +48,5 @@ int sonar_func() {
 }
 
 void loop() {
-  if (BTSerial.available())
-  {
-    // Читаем команду и заносим ее в переменную. char преобразует
-    // код символа команды в символ.
-    bt_input = (char)BTSerial.read();
-    // Отправляем команду в порт, чтобы можно было
-    // их проверить в "Мониторе порта".
-    //Serial.println(bt_input);
-    //Вызов функции выбора действия по команде
-    move_case(bt_input);
-    _time = micros();
-  }
-  if ((micros() - _time) > _move_time)
-  {
-    _stop();
-  }
-  if ((micros() - _time) >= 500)
-  {
-    _time = micros();
-    move_case(bt_input);
-  }
+  bluetooth_remote_control();
 }
