@@ -4,7 +4,7 @@
 int Trig;
 int Echo;
 
-int Sonar_init(int Tr, int Ec)
+int setup_sonar_system(int Tr, int Ec)
 {
     Trig = Tr;
     Echo = Ec;
@@ -13,7 +13,7 @@ int Sonar_init(int Tr, int Ec)
     pinMode(Echo, INPUT);
 }
 
-int Sonar(unsigned long Limit)
+int sonar(unsigned long Limit)
 {
     int Long_cm;
 
@@ -30,10 +30,4 @@ int Sonar(unsigned long Limit)
     if(Long_cm == 0)
         return int(Limit);
     return Long_cm;
-}
-
-void Sonar_init_method()
-{
-    //  Инициализируем дальномер Trig = A0, Echo = A1
-    Sonar_init(A0, A1);
 }

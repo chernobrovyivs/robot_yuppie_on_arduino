@@ -1,3 +1,5 @@
+#ifndef MotorDriverX2Lib_h
+#define MotorDriverX2Lib_h
 #include <Arduino.h>
 
 int motor_L1, motor_L2;
@@ -111,3 +113,5 @@ void _stop()
   digitalWrite(motor_R2, LOW);
   digitalWrite(motor_R1, LOW);
 }
+
+#endif

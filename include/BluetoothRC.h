@@ -1,9 +1,7 @@
-// Подключаем библиотеку управления двигателями (4 двигателя)
-#include <Motor.h>
-
 #include <SoftwareSerial.h>
 #include <Arduino.h>
 #include <move_case.h>
+#include <MotorDriverX2Lib.h>
 
 //Создаем последовательный порт на пинах 13-чтение и 2-передача.
 SoftwareSerial BTSerial(2, 3); // RX, TX
@@ -11,6 +9,17 @@ SoftwareSerial BTSerial(2, 3); // RX, TX
 unsigned long _time;
 // Переменная для приема данных по Bluetooth.
 char bt_input;
+
+void Bluetooth_init_method()
+{
+    // Устанавливаем скорость передачи данных для НС-05 (Bluetooth-модуль).
+    BTSerial.begin(9600);
+    // Переключаем A0 в двоичный режим работы, на передачу.
+    // если вы его еще не отключили
+    pinMode(14, OUTPUT);
+
+    _time = micros();
+}
 
 void bluetooth_remote_control()
 {

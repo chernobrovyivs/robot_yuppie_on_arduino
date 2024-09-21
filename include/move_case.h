@@ -1,3 +1,5 @@
+#include <MotorDriverX2Lib.h>
+
 // Пременная изменения скорости.
 unsigned long  _move_time;
 // == Выбор действий

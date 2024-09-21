@@ -8,49 +8,47 @@
 
 // Подключаем библиотеку управления через Bluetooth
 #include <BluetoothRC.h>
-/*
-  #include <robot_obstacle_avoidance.h>
-*/
+
+// Подключаем библиотеку навигации робота по Сонару
+#include <robot_obstacle_avoidance.h>
+
 
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.println("Hello, I'm robot named Yuppie ;)");
-  /*
-    neck.attach(A5);
-  */
 
-  // Инициализируем дальномер Trig = A0, Echo = A1
-  /*
-    Sonar_init(A0, A1);
-  */
+  neck.attach(A5);
+
+  //  Инициализируем ультразвуковой сонар (дальномер) Trig = A0, Echo = A1
+  setup_sonar_system(A0, A1);
+
+  // Инициализирует драйвер двигателя Motor L1 = 4, Motor L2 = 5, Motor R1 = 6, Motor R2 = 7
   setup_motor_system(4, 5, 6, 7);
 
   _stop();
 
-  // Устанавливаем скорость передачи данных для НС-05 (Bluetooth-модуль).
-  BTSerial.begin(9600);
-  // Переключаем A0 в двоичный режим работы, на передачу.
-  // если вы его еще не отключили
-  pinMode(14, OUTPUT);
+  // Инициализирует bluetooth модуль
+  Bluetooth_init_method();
+
+  pinMode(13, INPUT);
+  
   // Устанавливаем скорость передачи данных по кабелю.
   // Порт компьютера
   Serial.begin(9600);
-  _time = micros();
 }
-
-/*
-  int sonar_func() {
-  int prepyatstvie = Sonar(1000);
-  Serial.print("Distance = ");
-  Serial.print(prepyatstvie);
-  Serial.println(" cm.");
-
-  return prepyatstvie;
-}
-*/
 
 void loop() {
-  bluetooth_remote_control();
+  bool mode = (bool)digitalRead(13);
+
+  if (mode == 1)
+  {
+    bluetooth_remote_control();
+    Serial.println("On mode Bluetooth Remote Control");
+  } else
+  {
+    search_free_on_space_revolution();
+    Serial.println("On mode Autonomics navigation");
+  }
 }
