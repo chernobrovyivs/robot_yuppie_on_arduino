@@ -266,3 +266,24 @@ void search_free_on_space_revolution()
             delay(time_turn_180);
   }
 }
+
+void move_to_front_and_back()
+{
+    int front_param;
+    front_param = sonar(400);
+
+    if ((front_param >= 20) && (front_param <= 30))
+    {
+        forward();
+        delay(150);
+        Serial.println(front_param);
+    } else if (front_param < 10)
+    {
+        backward();
+        delay(150);
+        Serial.println(front_param);
+    } else
+    {
+        _stop();
+    }
+}

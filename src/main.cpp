@@ -1,8 +1,8 @@
 /*
   Project to build a robot named Yuppie on base Arduino UNO R3.
-  version: 0.1.1
+  version: 0.1.6
   date: 28.08.2024
-  modified 08.09.2024
+  modified 29.09.2024
   Developer: Valeriy Chernobrovyi (chernobrovyivs)
 */
 
@@ -12,7 +12,9 @@
 // Подключаем библиотеку навигации робота по Сонару
 #include <robot_obstacle_avoidance.h>
 
-
+// Переменная режима Autonomics navigation / Bluetooth RC
+bool mode_for_bt;
+bool mode_for_cf;
 
 void setup() {
   // put your setup code here, to run once:
@@ -32,6 +34,7 @@ void setup() {
   // Инициализирует bluetooth модуль
   Bluetooth_init_method();
 
+  pinMode(12, INPUT);
   pinMode(13, INPUT);
   
   // Устанавливаем скорость передачи данных по кабелю.
@@ -40,13 +43,23 @@ void setup() {
 }
 
 void loop() {
-  bool mode = (bool)digitalRead(13);
+  mode_for_bt = (bool)digitalRead(13);
+  mode_for_cf = (bool)digitalRead(12);
+  const int center_ang=85;
 
-  if (mode == 1)
+  move_to_front_and_back();
+
+  if (mode_for_bt == 1)
   {
+    neck.write(center_ang);
     bluetooth_remote_control();
     Serial.println("On mode Bluetooth Remote Control");
-  } else
+  } else if((mode_for_cf == 1) && (mode_for_bt != 1))
+  {
+    neck.write(center_ang);
+    move_to_front_and_back();
+    Serial.println("On mode follow the hand");
+  } else 
   {
     search_free_on_space_revolution();
     Serial.println("On mode Autonomics navigation");
