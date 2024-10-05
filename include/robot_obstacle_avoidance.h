@@ -274,12 +274,12 @@ void move_to_front_and_back()
 
     if ((front_param >= 20) && (front_param <= 30))
     {
-        forward();
+        forward_with_speed();
         delay(150);
         Serial.println(front_param);
     } else if (front_param < 10)
     {
-        backward();
+        backward_with_speed ();
         delay(150);
         Serial.println(front_param);
     } else

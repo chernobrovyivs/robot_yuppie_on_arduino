@@ -4,7 +4,7 @@
 #include <MotorDriverX2Lib.h>
 
 //Создаем последовательный порт на пинах 13-чтение и 2-передача.
-SoftwareSerial BTSerial(2, 3); // RX, TX
+SoftwareSerial BTSerial(8, 9); // RX, TX
 // Хранит время последнего нажатия кнопки.
 unsigned long _time;
 // Переменная для приема данных по Bluetooth.

@@ -27,7 +27,8 @@ void setup() {
   setup_sonar_system(A0, A1);
 
   // Инициализирует драйвер двигателя Motor L1 = 4, Motor L2 = 5, Motor R1 = 6, Motor R2 = 7
-  setup_motor_system(4, 5, 6, 7);
+  // setup_motor_system(4, 5, 6, 7); // without SHIM
+  setup_motor_system_with_shim(2, 4, 5, 7, 3, 6); // with SHIM
 
   _stop();
 

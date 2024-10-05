@@ -1,9 +1,18 @@
+/*
+  Lib for MotorDriverX2 (with SHIM)
+  version: 1.0.1
+  date: 28.08.2024
+  modified 30.09.2024
+  Developer: Valeriy Chernobrovyi (chernobrovyivs)
+*/
+
 #ifndef MotorDriverX2Lib_h
 #define MotorDriverX2Lib_h
 #include <Arduino.h>
 
 int motor_L1, motor_L2;
 int motor_R1, motor_R2;
+int ena, enb;
 
 void setup_motor_system(int L1, int L2, int R1, int R2) {
   motor_L1 = L1;
@@ -17,6 +26,26 @@ void setup_motor_system(int L1, int L2, int R1, int R2) {
 
   pinMode(motor_R1, OUTPUT);
   pinMode(motor_R2, OUTPUT);
+}
+
+void setup_motor_system_with_shim(int L1, int L2, int R1, int R2, int ENA, int ENB) {
+  motor_L1 = L1;
+  motor_L2 = L2;
+
+  motor_R1 = R1;
+  motor_R2 = R2;
+
+  ena = ENA;
+  enb = ENB;
+
+  pinMode(motor_L1, OUTPUT);
+  pinMode(motor_L2, OUTPUT);
+
+  pinMode(motor_R1, OUTPUT);
+  pinMode(motor_R2, OUTPUT);
+
+  pinMode(ena, OUTPUT);
+  pinMode(enb, OUTPUT);
 }
 
 //===============================================
@@ -112,6 +141,33 @@ void _stop()
   digitalWrite(motor_L1, LOW);
   digitalWrite(motor_R2, LOW);
   digitalWrite(motor_R1, LOW);
+}
+
+void forward_with_speed()
+{
+  int speed = 123;
+  // Если двигатель будет работать не в ту сторону,
+  // поменять на нем контакты местами.
+  digitalWrite(motor_L1, HIGH);
+  digitalWrite(motor_L2, LOW);
+  digitalWrite(motor_R1, HIGH);
+  digitalWrite(motor_R2, LOW);
+
+  analogWrite(ena, speed);
+  analogWrite(enb, speed);
+}
+
+void backward_with_speed()
+{
+  int speed = 123;
+  // Смена направления вращения двигателей.
+  digitalWrite(motor_L2, HIGH);
+  digitalWrite(motor_L1, LOW);
+  digitalWrite(motor_R2, HIGH);
+  digitalWrite(motor_R1, LOW);
+
+  analogWrite(ena, speed);
+  analogWrite(enb, speed);
 }
 
 #endif
