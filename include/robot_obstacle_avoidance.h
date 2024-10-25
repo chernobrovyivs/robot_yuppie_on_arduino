@@ -269,16 +269,23 @@ void search_free_on_space_revolution()
 
 void move_to_front_and_back()
 {
+    int led_front = 10;
     int front_param;
     front_param = sonar(400);
 
     if ((front_param >= 20) && (front_param <= 30))
     {
+        digitalWrite(led_front, HIGH);
+        digitalWrite(A3, LOW);
+        digitalWrite(A4, LOW);
         forward_with_speed();
         delay(150);
         Serial.println(front_param);
     } else if (front_param < 10)
     {
+        digitalWrite(led_front, LOW);
+        digitalWrite(A3, HIGH);
+        digitalWrite(A4, HIGH);
         backward_with_speed ();
         delay(150);
         Serial.println(front_param);

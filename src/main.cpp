@@ -12,6 +12,8 @@
 // Подключаем библиотеку навигации робота по Сонару
 #include <robot_obstacle_avoidance.h>
 
+#include <LED_Functions.h>
+
 // Переменная режима Autonomics navigation / Bluetooth RC
 bool mode_for_bt;
 bool mode_for_cf;
@@ -28,7 +30,8 @@ void setup() {
 
   // Инициализирует драйвер двигателя Motor L1 = 4, Motor L2 = 5, Motor R1 = 6, Motor R2 = 7
   // setup_motor_system(4, 5, 6, 7); // without SHIM
-  setup_motor_system_with_shim(2, 4, 5, 7, 3, 6); // with SHIM
+  // переменная SPD это скорость двигателей при использовании ШИМ, 7-й аргумент в функции
+  setup_motor_system_with_shim(2, 4, 5, 7, 3, 6, 123); // with SHIM
 
   _stop();
 
@@ -37,6 +40,10 @@ void setup() {
 
   pinMode(12, INPUT);
   pinMode(13, INPUT);
+  
+  pinMode(10, OUTPUT);
+  pinMode(A3, OUTPUT);
+  pinMode(A4, OUTPUT);
   
   // Устанавливаем скорость передачи данных по кабелю.
   // Порт компьютера
@@ -47,8 +54,6 @@ void loop() {
   mode_for_bt = (bool)digitalRead(13);
   mode_for_cf = (bool)digitalRead(12);
   const int center_ang=85;
-
-  move_to_front_and_back();
 
   if (mode_for_bt == 1)
   {

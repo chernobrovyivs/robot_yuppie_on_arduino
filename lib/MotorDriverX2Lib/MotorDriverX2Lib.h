@@ -13,6 +13,7 @@
 int motor_L1, motor_L2;
 int motor_R1, motor_R2;
 int ena, enb;
+int speed;
 
 void setup_motor_system(int L1, int L2, int R1, int R2) {
   motor_L1 = L1;
@@ -28,7 +29,7 @@ void setup_motor_system(int L1, int L2, int R1, int R2) {
   pinMode(motor_R2, OUTPUT);
 }
 
-void setup_motor_system_with_shim(int L1, int L2, int R1, int R2, int ENA, int ENB) {
+void setup_motor_system_with_shim(int L1, int L2, int R1, int R2, int ENA, int ENB, int SPD) {
   motor_L1 = L1;
   motor_L2 = L2;
 
@@ -37,6 +38,8 @@ void setup_motor_system_with_shim(int L1, int L2, int R1, int R2, int ENA, int E
 
   ena = ENA;
   enb = ENB;
+  
+  speed = SPD;
 
   pinMode(motor_L1, OUTPUT);
   pinMode(motor_L2, OUTPUT);
@@ -159,7 +162,6 @@ void forward_with_speed()
 
 void backward_with_speed()
 {
-  int speed = 123;
   // Смена направления вращения двигателей.
   digitalWrite(motor_L2, HIGH);
   digitalWrite(motor_L1, LOW);
